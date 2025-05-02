@@ -30,6 +30,7 @@ import { HttpStreamTransportConfig, DEFAULT_HTTP_STREAM_CONFIG } from "../transp
 import { DEFAULT_CORS_CONFIG } from "../transports/sse/types.js";
 import { AuthConfig } from "../auth/types.js";
 import { createRequire } from 'module';
+import { fileURLToPath } from 'url';
 
 const require = createRequire(import.meta.url);
 
@@ -125,10 +126,15 @@ export class MCPServer {
     if (configPath) {
       return configPath;
     }
-    if (process.argv[1]) {
-      return process.argv[1];
-    }
-    return process.cwd();
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
+
+  return resolve(__dirname); // ← points to dist/
+    
+   // if (process.argv[1]) {
+   //   return process.argv[1];
+   // }
+   // return process.cwd();
   }
 
   private createTransport(): BaseTransport {
